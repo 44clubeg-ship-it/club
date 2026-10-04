@@ -1,0 +1,20 @@
+# DeSina Global Digital Fortress - Robots.txt
+# Optimized for Googlebot and Global Indexing 2026
+
+User-agent: *
+Allow: /
+
+# Specifically inviting Google-Intelligence to explore all 19 pages
+User-agent: Googlebot
+Allow: /
+
+# Banning generic low-quality crawlers to keep your ZBook server performance high
+User-agent: AhrefsBot
+Disallow: /
+User-agent: MJ12bot
+Disallow: /
+
+# Direct Path to the Global Sitemap
+Sitemap: https://desina-hq.github.io/sitemap.xml
+
+# End of Secure Instruction

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="mainHtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title id="page-title">المكتبة الروحانية | DeSina</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* إعدادات الألوان الذكية - أوتو مود */
+        :root { 
+            color-scheme: light dark;
+            --bg-body: #ffffff; 
+            --bg-nav: rgba(255, 255, 255, 0.8); 
+            --bg-card: #f8f9fa; 
+            --text-main: #1a1a1a; 
+            --border-color: #e5e7eb; 
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root { 
+                --bg-body: #0a0c10; 
+                --bg-nav: rgba(0, 0, 0, 0.8); 
+                --bg-card: #161b22; 
+                --text-main: #ffffff; 
+                --border-color: #21262d; 
+            }
+        }
+
+        * { font-style: normal !important; font-family: 'Cairo', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); transition: 0.3s; }
+        nav { background-color: var(--bg-nav); border-bottom: 1px solid var(--border-color); }
+        
+        .content-card { 
+            background: var(--bg-card); 
+            /* الشريط الأحمر ثابت هنا وممنوع يتمسح */
+            border-top: 4px solid #ef4444 !important; 
+            border-radius: 30px !important; 
+            transition: 0.3s; 
+            border: 1px solid var(--border-color);
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+            padding-bottom: 40px;
+        }
+        .content-card:hover { transform: translateY(-5px); box-shadow: 0 30px 20px rgba(239, 68, 68, 0.8); }
+
+        select { width: 100%; padding: 10px; border-radius: 12px; background: var(--bg-card); color: var(--text-main); border: 1px solid #ef4444; margin-top: 15px; cursor: pointer; }
+        #surahList { margin-top: 20px; }
+
+        audio { outline: none; border: none; }
+
+        .player-controls { display: flex; gap: 25px; margin-top: 20px; align-items: center; }
+        .control-btn { color: #555; font-size: 1.2rem; cursor: pointer; transition: 0.3s; background: none; border: none; }
+        .control-btn:hover { color: #ef4444; }
+        .control-btn.active { color: #ef4444; text-shadow: 0 0 10px #ef4444; }
+        
+        .lang-switch {
+            background: linear-gradient(45deg, #ef4444, #000);
+            color: white !important; padding: 4px 12px; border-radius: 50px; font-size: 13px; font-weight: 800; cursor: pointer; border: 1px solid rgba(255,255,255,0.2); display: inline-flex; align-items: center; gap: 6px;
+        }
+        .anghami-container { width: 100%; border-radius: 15px; overflow: hidden; background: #000; height: 270px; }
+    </style>
+</head>
+<body>
+    <nav class="p-4 sticky top-0 z-50 backdrop-blur-md">
+        <div class="container mx-auto flex justify-between items-center px-4">
+            <a href="index-ar.html" id="homeLink" class="font-bold flex items-center gap-2 hover:text-red-600 transition text-sm md:text-base"><i class="fas fa-chevron-right" id="home-icon"></i> <span id="nav-home-text">الرئيسية</span></a>
+            <div class="flex items-center gap-4">
+                <div onclick="toggleLanguage()" class="lang-switch"><i class="fas fa-globe"></i> <span id="lang-text">EN</span></div>
+                <a href="index-ar.html" id="logoLink"><img src="logo.webp" style="height: 35px; border-radius: 5px;"></a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="py-12 text-center px-4">
+        <h1 id="header-title" class="text-4xl md:text-5xl font-extrabold text-red-600 mb-4 tracking-tighter">الواحة الروحانية</h1>
+        <p id="header-desc" class="text-lg font-bold opacity-80 uppercase">Creative Inspiration with DeSina</p>
+    </header>
+
+    <main class="container mx-auto px-6 pb-20">
+        <h2 id="section-1-title" class="text-2xl font-bold mb-10 text-red-600 border-r-4 border-red-600 pr-4 text-right">أقسام المصحف الإلكتروني</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-20">
+            <div class="p-8 content-card shadow-2xl">
+                <img src="logo.webp" class="h-10 mb-6 rounded shadow-md">
+                <h2 id="card-quran-title" class="text-xl font-bold mb-4">قسم القرآن الكريم</h2>
+                <select id="reciterList"><option id="reciter-loading">جارٍ تحميل القراء بجودة HD...</option></select>
+                <select id="surahList" style="display:none;"></select>
+                <audio id="audioPlayer" controls preload="auto" class="w-full mt-6"></audio>
+                <div class="player-controls">
+                    <button id="prevBtn" class="control-btn"><i class="fas fa-step-backward"></i></button>
+                    <button id="repeatBtn" class="control-btn"><i class="fas fa-redo"></i></button>
+                    <button id="nextBtn" class="control-btn"><i class="fas fa-step-forward"></i></button>
+                </div>
+            </div>
+
+            <div class="p-8 content-card shadow-2xl">
+                <img src="logo.webp" class="h-10 mb-6 rounded shadow-md">
+                <h2 id="card-tafseer-title" class="text-xl font-bold mb-4 uppercase">قسم التفسير والتدبر</h2>
+                <p id="card-tafseer-desc" class="text-gray-500 mb-6 text-sm font-bold">تصفح أمهات كتب التفسير والبحث في معاني الآيات عبر المكتبة الشاملة.</p>
+                <a href="https://shamela.ws" target="_blank" id="btn-tafseer" class="bg-red-600 text-white px-8 py-3 rounded-2xl font-bold hover:bg-black transition-all">فتح المكتبة الشاملة</a>
+            </div>
+        </div>
+
+        <h2 id="section-2-title" class="text-2xl font-bold mb-10 text-red-600 border-r-4 border-red-600 pr-4 text-right">قسم البث المباشر</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div class="p-8 content-card shadow-2xl">
+                <div class="flex items-center gap-4 mb-8"><i class="fas fa-broadcast-tower text-4xl text-red-600"></i><div><h2 id="live-radio-title" class="text-xl font-bold">إذاعة القرآن</h2><p class="text-gray-500 text-sm uppercase">Radio Cairo</p></div></div>
+                <div class="anghami-container">
+                    <iframe src="https://n02.radiojar.com/8s5u8tp4sq5tv" class="w-full h-full"></iframe>
+                </div>
+            </div>
+            <div class="p-8 content-card shadow-2xl">
+                <div class="flex items-center gap-4 mb-8"><i class="fas fa-tv text-4xl text-red-600"></i><div><h2 id="live-tv-title" class="text-xl font-bold">بث مرئي</h2><p class="text-gray-500 text-sm uppercase">Makkah Live</p></div></div>
+                <div class="anghami-container">
+                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/Wh6l79aSbaY" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="py-10 text-center border-t border-gray-900/10 mt-20 font-bold">
+        <p id="footer-text" class="text-red-600 text-sm tracking-tighter">جميع حقوق الملكية محفوظة | DeSina Spiritual © 2026</p>
+    </footer>
+
+    <script>
+        const surahNames = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
+        const reciterSelect = document.getElementById('reciterList');
+        const surahSelect = document.getElementById('surahList');
+        const audioPlayer = document.getElementById('audioPlayer');
+        let isRepeat = false;
+        let currentLang = 'ar';
+
+        const trans = {
+            ar: { home: "الرئيسية", header: "الواحة الروحانية", sec1: "أقسام المصحف الإلكتروني", sec2: "قسم البث المباشر", q_title: "قسم القرآن الكريم", t_title: "قسم التفسير والتدبر", t_desc: "تصفح أمهات كتب التفسير والبحث في معاني الآيات عبر المكتبة الشاملة.", rb: "فتح المكتبة الشاملة", radio: "إذاعة القرآن", tv: "بث مرئي", footer: "جميع حقوق الملكية محفوظة | DeSina Spiritual © 2026", lang: "EN" },
+            en: { home: "Home", header: "Spiritual Oasis", sec1: "Electronic Quran Sections", sec2: "Live Broadcast Section", q_title: "Holy Quran Section", t_title: "Interpretation Section", t_desc: "Browse the books of interpretation and research meanings via Shamela Library.", rb: "Open Shamela Library", radio: "Quran Radio", tv: "Live Stream", footer: "All Rights Reserved | DeSina Spiritual © 2026", lang: "AR" }
+        };
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            const d = trans[lang];
+            const html = document.getElementById('mainHtml');
+            document.getElementById('nav-home-text').innerText = d.home;
+            document.getElementById('header-title').innerText = d.header;
+            document.getElementById('section-1-title').innerText = d.sec1;
+            document.getElementById('section-2-title').innerText = d.sec2;
+            document.getElementById('card-quran-title').innerText = d.q_title;
+            document.getElementById('card-tafseer-title').innerText = d.t_title;
+            document.getElementById('card-tafseer-desc').innerText = d.t_desc;
+            document.getElementById('btn-tafseer').innerText = d.rb;
+            document.getElementById('live-radio-title').innerText = d.radio;
+            document.getElementById('live-tv-title').innerText = d.tv;
+            document.getElementById('footer-text').innerText = d.footer;
+            document.getElementById('lang-text').innerText = d.lang;
+            html.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            html.lang = lang;
+
+            const homeLink = document.getElementById('homeLink');
+            const logoLink = document.getElementById('logoLink');
+            const s1 = document.getElementById('section-1-title');
+            const s2 = document.getElementById('section-2-title');
+
+            if(lang === 'en') {
+                homeLink.href = 'index.html';
+                logoLink.href = 'index.html';
+                s1.className = "text-2xl font-bold mb-10 text-red-600 border-l-4 border-red-600 pl-4 text-left";
+                s2.className = "text-2xl font-bold mb-10 text-red-600 border-l-4 border-red-600 pl-4 text-left";
+                document.getElementById('home-icon').className = "fas fa-chevron-left";
+            } else {
+                homeLink.href = 'index-ar.html';
+                logoLink.href = 'index-ar.html';
+                s1.className = "text-2xl font-bold mb-10 text-red-600 border-r-4 border-red-600 pr-4 text-right";
+                s2.className = "text-2xl font-bold mb-10 text-red-600 border-r-4 border-red-600 pr-4 text-right";
+                document.getElementById('home-icon').className = "fas fa-chevron-right";
+            }
+            initQuran();
+        }
+
+        function toggleLanguage() {
+            setLanguage(currentLang === 'ar' ? 'en' : 'ar');
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (document.referrer.includes('index.html')) {
+                setLanguage('en');
+            } else {
+                setLanguage('ar');
+            }
+        });
+
+        async function initQuran() {
+            try {
+                const res = await fetch('https://mp3quran.net/api/v3/reciters?language=ar&rewaya=1');
+                const data = await res.json();
+                reciterSelect.innerHTML = currentLang === 'ar' ? '<option value="">-- اختر القارئ (جودة HQ) --</option>' : '<option value="">-- Select Reciter (HQ) --</option>';
+                data.reciters.sort((a,b) => a.name.localeCompare(b.name, 'ar'));
+                data.reciters.forEach(r => {
+                    if(r.moshaf && r.moshaf.length > 0){
+                        let opt = document.createElement('option');
+                        opt.value = r.moshaf[0].server;
+                        opt.dataset.surahs = r.moshaf[0].surah_list;
+                        opt.textContent = r.name;
+                        reciterSelect.appendChild(opt);
+                    }
+                });
+            } catch (e) { reciterSelect.innerHTML = '<option>Error</option>'; }
+        }
+
+        reciterSelect.onchange = function() {
+            const server = this.value;
+            const surahs = this.options[this.selectedIndex].dataset.surahs;
+            if(!server) return;
+            surahSelect.style.display = 'block';
+            surahSelect.innerHTML = currentLang === 'ar' ? '<option value="">-- اختر السورة --</option>' : '<option value="">-- Select Surah --</option>';
+            surahs.split(',').forEach(num => {
+                let opt = document.createElement('option');
+                opt.value = server + num.padStart(3, '0') + '.mp3';
+                opt.textContent = surahNames[parseInt(num)-1];
+                surahSelect.appendChild(opt);
+            });
+        };
+
+        surahSelect.onchange = function() {
+            if(this.value) {
+                audioPlayer.src = this.value;
+                audioPlayer.load(); 
+                audioPlayer.play();
+                updateMediaSession();
+            }
+        };
+
+        audioPlayer.onended = function() {
+            if (isRepeat) { audioPlayer.play(); } 
+            else { document.getElementById('nextBtn').click(); }
+        };
+
+        document.getElementById('nextBtn').onclick = function() {
+            if(surahSelect.selectedIndex < surahSelect.options.length - 1) {
+                surahSelect.selectedIndex++;
+                surahSelect.onchange();
+            }
+        };
+
+        document.getElementById('prevBtn').onclick = function() {
+            if(surahSelect.selectedIndex > 1) {
+                surahSelect.selectedIndex--;
+                surahSelect.onchange();
+            }
+        };
+
+        document.getElementById('repeatBtn').onclick = function() {
+            isRepeat = !isRepeat;
+            this.classList.toggle('active');
+        };
+
+       function updateMediaSession() {
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: surahSelect.options[surahSelect.selectedIndex].textContent,
+                    artist: reciterSelect.options[reciterSelect.selectedIndex].textContent,
+                    album: 'DeSina Spiritual',
+                    artwork: [{ src: 'logo.webp', sizes: '512x512', type: 'image/webp' }]
+                });
+
+                navigator.mediaSession.setActionHandler('nexttrack', () => {
+                    document.getElementById('nextBtn').click();
+                });
+                navigator.mediaSession.setActionHandler('previoustrack', () => {
+                    document.getElementById('prevBtn').click();
+                });
+                navigator.mediaSession.setActionHandler('play', () => {
+                    audioPlayer.play();
+                });
+                navigator.mediaSession.setActionHandler('pause', () => {
+                    audioPlayer.pause();
+                });
+            }
+        }
+    </script>
+</body>
+</html>
