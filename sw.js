@@ -1,10 +1,10 @@
 self.addEventListener('install', (e) => {
   e.waitUntil(
-    caches.open('desina-v10').then((cache) => cache.addAll([
+    caches.open('44club-v10').then((cache) => cache.addAll([
       '/',
       '/index.html',
-      '/index-ar.html',
-      '/logo-512.png'
+      '/index-en.html',
+      '/logo11.png'
     ])),
   );
 });
