@@ -1,6 +1,6 @@
 self.addEventListener('install', (e) => {
   e.waitUntil(
-    caches.open('44club-v10').then((cache) => cache.addAll([
+    caches.open('44club-v11').then((cache) => cache.addAll([
       '/',
       '/index.html',
       '/index-en.html',
