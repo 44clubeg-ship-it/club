@@ -15,6 +15,6 @@ User-agent: MJ12bot
 Disallow: /
 
 # Direct Path to the Global Sitemap
-Sitemap: https://desina-hq.github.io/sitemap.xml
+Sitemap: https://44clubeg-ship-it.github.io/club/sitemap.xml
 
 # End of Secure Instruction
