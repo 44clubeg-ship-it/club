@@ -7,13 +7,13 @@
   "theme_color": "#4C0085",
   "icons": [
     {
-      "src": "logo11.png",
+      "src": "logo99.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "logo11.png",
+      "src": "logo99.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
